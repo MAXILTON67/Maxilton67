@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MAXILTON</title>
+<style>
+:root{--bg:#f6f3ee;--card:#fff;--ink:#1b1b1f;--mut:#6b6b73;--acc:#d9480f;--line:#e4dfd6}
+@media (prefers-color-scheme:dark){:root{--bg:#121214;--card:#1c1c20;--ink:#f1f1f3;--mut:#9a9aa3;--acc:#ff8a4c;--line:#2c2c32;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{text-align:center;padding:28px 16px 8px}
+h1{margin:0;font-size:42px;letter-spacing:4px;font-weight:900}
+.sub{color:var(--mut);margin:6px 0 0}
+nav{display:flex;gap:8px;justify-content:center;padding:16px;flex-wrap:wrap}
+nav button{border:1px solid var(--line);background:var(--card);color:var(--ink);padding:10px 16px;border-radius:999px;font-size:15px;cursor:pointer}
+nav button.on{background:var(--acc);border-color:var(--acc);color:#fff}
+main{max-width:900px;margin:0 auto;padding:0 16px 40px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+.card img,.card video{width:100%;aspect-ratio:4/3;object-fit:cover;background:#000;display:block}
+.t{padding:10px 12px 4px;font-size:14px;word-break:break-word}
+.a{padding:8px 12px 12px;margin-top:auto}
+.btn{display:inline-block;background:var(--acc);color:#fff;padding:9px 14px;border-radius:8px;font-size:14px;text-decoration:none}
+.empty{text-align:center;color:var(--mut);padding:40px 10px}
+.sec{display:none}.sec.on{display:block}
+</style>
+</head>
+<body>
+<header>
+  <h1>MAXILTON</h1>
+  <p class="sub">Photos, videos, games &amp; downloads</p>
+</header>
+<nav id="tabs">
+  <button data-k="photos" class="on">Photos</button>
+  <button data-k="videos">Videos</button>
+  <button data-k="games">Games &amp; Files</button>
+</nav>
+<main>
+  <div class="sec on" id="photos"></div>
+  <div class="sec" id="videos"></div>
+  <div class="sec" id="games"></div>
+</main>
+<script>
+/* EDIT THESE LISTS TO ADD THINGS.
+   photos: put the picture in a folder called "photos" on GitHub, then add its file name here.
+   videos: put the video in a folder called "videos", then add its file name here.
+   games:  add a title and a link (Google Drive, Mega, etc). */
+var PHOTOS = [
+  // { name: "Beach day", file: "beach.jpg" },
+];
+var VIDEOS = [
+  // { name: "Trip video", file: "trip.mp4" },
+];
+var GAMES = [
+  // { name: "Game name", link: "https://drive.google.com/..." },
+];
+
+function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+function fill(id,list,build){
+  var box=document.getElementById(id);
+  if(!list.length){box.appendChild(el("div","empty","Nothing here yet."));return}
+  var g=el("div","grid");
+  list.forEach(function(it){var c=el("div","card");build(c,it);g.appendChild(c)});
+  box.appendChild(g);
+}
+fill("photos",PHOTOS,function(c,it){
+  var i=el("img");i.src="photos/"+it.file;i.alt=it.name;i.loading="lazy";c.appendChild(i);
+  c.appendChild(el("div","t",it.name));
+  var a=el("div","a"),b=el("a","btn","Download");b.href="photos/"+it.file;b.download=it.file;a.appendChild(b);c.appendChild(a);
+});
+fill("videos",VIDEOS,function(c,it){
+  var v=el("video");v.src="videos/"+it.file;v.controls=true;v.preload="metadata";c.appendChild(v);
+  c.appendChild(el("div","t",it.name));
+  var a=el("div","a"),b=el("a","btn","Download");b.href="videos/"+it.file;b.download=it.file;a.appendChild(b);c.appendChild(a);
+});
+fill("games",GAMES,function(c,it){
+  c.appendChild(el("div","t",it.name));
+  var a=el("div","a"),b=el("a","btn","Open link");b.href=it.link;b.target="_blank";b.rel="noopener noreferrer";a.appendChild(b);c.appendChild(a);
+});
+document.getElementById("tabs").onclick=function(e){
+  var k=e.target.getAttribute("data-k");if(!k)return;
+  [].forEach.call(this.children,function(b){b.classList.toggle("on",b===e.target)});
+  [].forEach.call(document.querySelectorAll(".sec"),function(s){s.classList.toggle("on",s.id===k)});
+};
+</script>
+</body>
+</html>
